@@ -130,13 +130,12 @@ function pkg_precompile()
                 Base.precompile(Tuple{typeof(REPL.LineEdit.complete_line), Pkg.REPLMode.PkgCompletionProvider, REPL.LineEdit.PromptState})
                 Base.precompile(Tuple{typeof(Pkg.REPLMode.complete_argument), Pkg.REPLMode.CommandSpec, Array{String, 1}, String, Int64, Int64})
                 Base.precompile(Tuple{typeof(Pkg.REPLMode.complete_add_dev), Base.Dict{Symbol, Any}, String, Int64, Int64})
-            # end
-        # end
+        end
+        copy!(DEPOT_PATH, original_depot_path)
+        copy!(LOAD_PATH, original_load_path)
+        return nothing
     end
-    copy!(DEPOT_PATH, original_depot_path)
-    copy!(LOAD_PATH, original_load_path)
-    return nothing
-end
-
-pkg_precompile()
+    if Base.generating_output()
+        pkg_precompile()
+    end
 end
